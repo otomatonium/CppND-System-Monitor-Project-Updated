@@ -18,6 +18,8 @@ Within the Udacity Workspace, `.student_bashrc` automatically installs ncurses e
 
 If you are not using the Workspace, install ncurses within your own Linux environment: `sudo apt install libncurses5-dev libncursesw5-dev`
 
+
+
 ## Make
 This project uses [Make](https://www.gnu.org/software/make/). The Makefile has four targets:
 * `build` compiles the source code and generates an executable
@@ -39,3 +41,10 @@ This project uses [Make](https://www.gnu.org/software/make/). The Makefile has f
 5. Implement the `System`, `Process`, and `Processor` classes, as well as functions within the `LinuxParser` namespace.
 
 6. Submit!
+
+## Appendix: for MacOS
+
+After a fresh clone, the following two steps resulted in `make build` success:
+
+1. Add `#include <sstream>` to src/linux_parser.cpp
+2. Install ncurses via brew install ncurses and exporting CXXFLAGS as follows: `export CXXFLAGS="-I/usr/local/opt/ncurses/include"`
