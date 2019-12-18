@@ -19,7 +19,8 @@ const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
 // Text labels
-const std::string kLabelProcesses{"processes"};
+const std::string kLabelTotalProcesses{"processes"};
+const std::string kLabelRunningProcesses{"procs_running"};
 
 // System
 float MemoryUtilization();

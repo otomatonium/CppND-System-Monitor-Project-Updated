@@ -1,3 +1,4 @@
+
 #include "system.h"
 
 #include <unistd.h>
@@ -32,8 +33,9 @@ float System::MemoryUtilization() { return 0.0; }
 // TODO: Return the operating system name
 std::string System::OperatingSystem() { return LinuxParser::OperatingSystem(); }
 
+// DONE
 // TODO: Return the number of processes actively running on the system
-int System::RunningProcesses() { return 0; }
+int System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
 
 // DONE
 // TODO: Return the total number of processes on the system
