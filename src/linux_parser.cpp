@@ -247,7 +247,8 @@ float LinuxParser::CpuUtilization(int pid) {
 
   long int total_time = utime + stime;
   // total_time += cutime + cstime;
-  long int seconds = UpTime() - (starttime / hertz);
+  long int recentUptime = UpTime() > 3600 ? 3600 : UpTime();
+  long int seconds = recentUptime - (starttime / hertz);
 
   float cpu_usage = 100.0 * ((total_time / hertz) / (float)seconds);
   return cpu_usage;

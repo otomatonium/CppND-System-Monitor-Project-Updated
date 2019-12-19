@@ -7,6 +7,7 @@
 #include <set>
 #include <string>
 #include <vector>
+//#include <algorithm>
 
 #include "linux_parser.h"
 #include "process.h"
@@ -28,6 +29,11 @@ vector<Process>& System::Processes() {
     Process process(pid, LinuxParser::User(pid), LinuxParser::Command(pid), LinuxParser::CpuUtilization(pid));
     processes_.emplace_back(process);
   }
+
+  std::sort(this->processes_.begin(), this->processes_.end(),
+       [](const Process a, const Process b) {
+         return a < b;
+       });
 
   return processes_;
 }
