@@ -13,11 +13,12 @@ using std::to_string;
 using std::vector;
 
 Process::Process(const int pid, const string user, const string command,
-                 const float cpuUtilization)
+                 const float cpuUtilization, const long upTime)
     : pid_(pid),
       user_(user),
       command_(command),
-      cpuUtilization_(cpuUtilization) {}
+      cpuUtilization_(cpuUtilization),
+      upTime_(upTime) {}
 
 // DONE
 // TODO: Return this process's ID

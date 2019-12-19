@@ -220,9 +220,23 @@ string LinuxParser::User(int pid) {
   return kErr;
 }
 
+// DONE
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid [[maybe_unused]]) { return 0; }
+long LinuxParser::UpTime(int pid) { 
+  string item;
+  std::vector<string> stats;
+  std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, item, ' ')) {
+      stats.emplace_back(item);
+    }
+  } else {
+    return NULL;
+  }
+
+  return stol(stats[21]) / sysconf(_SC_CLK_TCK);
+}
 
 float LinuxParser::CpuUtilization(int pid) {
   string item;
@@ -233,7 +247,7 @@ float LinuxParser::CpuUtilization(int pid) {
       stats.emplace_back(item);
     }
   } else {
-    return -1.0;
+    return NULL;
   }
 
   long int utime = stol(stats[13]);

@@ -26,18 +26,19 @@ Processor& System::Cpu() { return cpu_; }
 vector<Process>& System::Processes() {
   std::vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
-    Process process(pid, LinuxParser::User(pid), LinuxParser::Command(pid), LinuxParser::CpuUtilization(pid));
+    Process process(pid, LinuxParser::User(pid), LinuxParser::Command(pid), LinuxParser::CpuUtilization(pid), LinuxParser::UpTime(pid));
     processes_.emplace_back(process);
   }
 
   std::sort(this->processes_.begin(), this->processes_.end(),
-       [](const Process a, const Process b) {
+       [](const Process& a, const Process& b) {
          return a < b;
        });
 
   return processes_;
 }
 
+// DONE
 // TODO: Return the system's kernel identifier (string)
 std::string System::Kernel() { return LinuxParser::Kernel(); }
 
