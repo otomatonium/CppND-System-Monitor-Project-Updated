@@ -20,11 +20,12 @@ using std::vector;
 // TODO: Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
 
+// IN PROGRESS
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
   std::vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
-    Process process(pid);
+    Process process(pid, LinuxParser::User(pid));
     processes_.emplace_back(process);
   }
 

@@ -22,6 +22,7 @@ const std::string kPasswordPath{"/etc/passwd"};
 const std::string kLabelTotalProcesses{"processes"};
 const std::string kLabelRunningProcesses{"procs_running"};
 const std::string kErr{"ERROR"};
+const std::string kLabelUid("Uid:");
 
 // System
 float MemoryUtilization();
@@ -55,7 +56,7 @@ long IdleJiffies();
 std::string Command(int pid);
 std::string Ram(int pid);
 std::string Uid(int pid);
-std::string User(int pid);
+std::string User(int uid);
 long int UpTime(int pid);
 };  // namespace LinuxParser
 

@@ -12,8 +12,9 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-Process::Process(const int pid) : pid_(pid) {}
+Process::Process(const int pid, const string user) : pid_(pid), user_(user) {}
 
+// DONE
 // TODO: Return this process's ID
 int Process::Pid() { return pid_; }
 
@@ -26,8 +27,9 @@ string Process::Command() { return string(); }
 // TODO: Return this process's memory utilization
 string Process::Ram() { return string(); }
 
+// DONE
 // TODO: Return the user (name) that generated this process
-string Process::User() { return string(); }
+string Process::User() { return user_; }
 
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { return 0; }

@@ -77,7 +77,6 @@ float LinuxParser::MemoryUtilization() { return 0.0; }
 // DONE
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() {
-
   long uptime;
   string line;
 
@@ -88,7 +87,7 @@ long LinuxParser::UpTime() {
     linestream >> uptime;
     return uptime;
   }
-  
+
   return NULL;
 }
 
@@ -160,13 +159,53 @@ string LinuxParser::Command(int pid [[maybe_unused]]) { return string(); }
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid [[maybe_unused]]) { return string(); }
 
+// DONE
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid [[maybe_unused]]) { return string(); }
+string LinuxParser::Uid(int pid) {
+  string lineLabel;
+  string val;
+  string line;
 
+  std::ifstream stream(kProcDirectory + to_string(pid) + kStatusFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      linestream >> lineLabel;
+
+      if (lineLabel == kLabelUid) {
+        linestream >> val;
+        return val;
+      }
+    }
+  }
+  return kErr;
+}
+
+// DONE
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid [[maybe_unused]]) { return string(); }
+string LinuxParser::User(int pid) {
+  int uid = stoi(LinuxParser::Uid(pid));
+  string lineLabel;
+  string val;
+  string line;
+
+  std::ifstream stream(kPasswordPath);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      int unameIdxEnd = line.find(':', 0);
+      int uidIdxStart = line.find(':', unameIdxEnd + 1);
+      int uidIdxEnd = line.find(':', uidIdxStart + 1);
+      int foundUid =
+          stoi(line.substr(uidIdxStart + 1, uidIdxEnd - uidIdxStart));
+      if (uid == foundUid) {
+        return line.substr(0, unameIdxEnd);
+      }
+    }
+  }
+  return kErr;
+}
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
