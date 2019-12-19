@@ -21,6 +21,7 @@ const std::string kPasswordPath{"/etc/passwd"};
 // Text labels
 const std::string kLabelTotalProcesses{"processes"};
 const std::string kLabelRunningProcesses{"procs_running"};
+const std::string kErr{"ERROR"};
 
 // System
 float MemoryUtilization();

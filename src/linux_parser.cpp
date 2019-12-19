@@ -33,7 +33,7 @@ string LinuxParser::OperatingSystem() {
       }
     }
   }
-  return value;
+  return kErr;
 }
 
 // DONE: An example of how to read data from the filesystem
@@ -45,8 +45,10 @@ string LinuxParser::Kernel() {
     std::getline(stream, line);
     std::istringstream linestream(line);
     linestream >> os >> versionLabel >> kernel;
+    return kernel;
   }
-  return kernel;
+
+  return kErr;
 }
 
 // BONUS: Update this to use std::filesystem
@@ -72,8 +74,23 @@ vector<int> LinuxParser::Pids() {
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() { return 0.0; }
 
+// IN PROGRESS
 // TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+long LinuxParser::UpTime() {
+
+  long uptime;
+  string line;
+
+  std::ifstream stream(kProcDirectory + kUptimeFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> uptime;
+    return uptime;
+  }
+  
+  return NULL;
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
@@ -101,11 +118,10 @@ int LinuxParser::TotalProcesses() {
   std::ifstream stream(kProcDirectory + kStatFilename);
   if (stream.is_open()) {
     while (std::getline(stream, line)) {
-
       std::istringstream linestream(line);
       linestream >> lineLabel;
 
-      if (lineLabel == LinuxParser::kLabelTotalProcesses) {
+      if (lineLabel == kLabelTotalProcesses) {
         linestream >> val;
         break;
       }
@@ -116,7 +132,7 @@ int LinuxParser::TotalProcesses() {
 
 // DONE
 // TODO: Read and return the number of running processes
-int LinuxParser::RunningProcesses() { 
+int LinuxParser::RunningProcesses() {
   string lineLabel;
   int val;
   string line;
@@ -124,11 +140,10 @@ int LinuxParser::RunningProcesses() {
   std::ifstream stream(kProcDirectory + kStatFilename);
   if (stream.is_open()) {
     while (std::getline(stream, line)) {
-
       std::istringstream linestream(line);
       linestream >> lineLabel;
 
-      if (lineLabel == LinuxParser::kLabelRunningProcesses) {
+      if (lineLabel == kLabelRunningProcesses) {
         linestream >> val;
         break;
       }
