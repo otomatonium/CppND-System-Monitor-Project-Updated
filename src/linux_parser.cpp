@@ -153,7 +153,20 @@ int LinuxParser::RunningProcesses() {
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid [[maybe_unused]]) { return string(); }
+string LinuxParser::Command(int pid) {
+  string val;
+  string line;
+
+  std::ifstream stream(kProcDirectory + to_string(pid) + kCmdlineFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      linestream >> val;
+      return val;
+    }
+  }
+  return kErr;
+}
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
@@ -210,3 +223,32 @@ string LinuxParser::User(int pid) {
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid [[maybe_unused]]) { return 0; }
+
+float LinuxParser::CpuUtilization(int pid) {
+  string item;
+  std::vector<string> stats;
+  std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, item, ' ')) {
+      stats.emplace_back(item);
+    }
+  } else {
+    return -1.0;
+  }
+
+  long int utime = stol(stats[13]);
+  long int stime = stol(stats[14]);
+  long int cutime = stol(stats[15]);
+  long int cstime = stol(stats[16]);
+  long int starttime = stol(stats[21]);
+
+  // getconf_TCK_CLK;
+  int hertz = sysconf(_SC_CLK_TCK);
+
+  long int total_time = utime + stime;
+  // total_time += cutime + cstime;
+  long int seconds = UpTime() - (starttime / hertz);
+
+  float cpu_usage = 100.0 * ((total_time / hertz) / (float)seconds);
+  return cpu_usage;
+}
