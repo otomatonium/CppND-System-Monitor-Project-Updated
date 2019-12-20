@@ -8,5 +8,5 @@ Processor::Processor(float utilization) : utilization_(utilization) {};
 
 // TODO: Return the aggregate CPU utilization
 float Processor::Utilization() { 
-    std::vector<std::string> cpuUtilization = LinuxParser::CpuUtilization();
+    return utilization_;    
 }

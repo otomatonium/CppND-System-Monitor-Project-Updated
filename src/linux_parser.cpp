@@ -64,7 +64,7 @@ vector<int> LinuxParser::Pids() {
       string filename(file->d_name);
       if (std::all_of(filename.begin(), filename.end(), isdigit)) {
         int pid = stoi(filename);
-        pids.push_back(pid);
+        pids.emplace_back(pid);
       }
     }
   }
@@ -72,8 +72,58 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
+// DONE
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() {
+  string lineLabel;
+  long memTotal, memFree, buffers, cached, sReclaimable, shmem, swapTotal, swapFree;
+  string val;
+  string line;
+
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      linestream >> lineLabel;
+
+      if (lineLabel == kLabelMemTotal) {
+        linestream >> val;
+        memTotal = stol(val);
+      } else if (lineLabel == kLabelMemFree) {
+        linestream >> val;
+        memFree = stol(val);
+      }
+      /* Uncomment for alternative memory utilization
+      as necessary */
+      /*
+      else if (lineLabel == kLabelBuffers) {
+        linestream >> val;
+        buffers = stol(val);
+      } else if (lineLabel == kLabelCached) {
+        linestream >> val;
+        cached = stol(val);
+      } else if (lineLabel == kLabelSReclaimable) {
+        linestream >> val;
+        sReclaimable = stol(val);
+      } else if (lineLabel == kLabelShmem) {
+        linestream >> val;
+        shmem = stol(val);
+      } else if (lineLabel == kLabelSwapTotal) {
+        linestream >> val;
+        swapTotal = stol(val);
+      } else if (lineLabel == kLabelSwapFree) {
+        linestream >> val;
+        swapFree = stol(val);
+      }
+      */
+    }
+
+    // Calculate memory usage
+     return (memTotal - memFree) / (float)memTotal;
+  }
+
+  return NULL;
+}
 
 // DONE
 // TODO: Read and return the system uptime
@@ -109,7 +159,7 @@ long LinuxParser::IdleJiffies() { return 0; }
 vector<string> LinuxParser::CpuUtilization() {
   string item;
   string line, lineLabel;
-  std::vector<string> stats;
+  std::vector<string> stats{};
   std::ifstream stream(kProcDirectory + kStatFilename);
   if (stream.is_open()) {
     while (std::getline(stream, line)) {
@@ -122,8 +172,8 @@ vector<string> LinuxParser::CpuUtilization() {
         return stats;
       }
     }
-  } 
-  return {};
+  }
+  return stats;
 }
 
 // DONE

@@ -26,6 +26,21 @@ const std::string kErr{"ERROR"};
 const std::string kLabelUid("Uid:");
 const std::string kLabelRam("VmSize:");
 const std::string kLabelCpu("cpu");
+const std::string kLabelMemTotal("MemTotal:");
+const std::string kLabelMemFree("MemFree:");
+const std::string kLabelBuffers("Buffers:");
+const std::string kLabelCached("Cached:");
+const std::string kLabelSReclaimable("SReclaimable:");
+const std::string kLabelShmem("Shmem:");
+const std::string kLabelSwapTotal("SwapTotal:");
+const std::string kLabelSwapFree("SwapFree:");
+
+
+
+
+
+
+
 
 // System
 float MemoryUtilization();

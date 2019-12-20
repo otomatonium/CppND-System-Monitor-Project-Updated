@@ -7,7 +7,6 @@
 #include <set>
 #include <string>
 #include <vector>
-//#include <algorithm>
 
 #include "linux_parser.h"
 #include "process.h"
@@ -19,16 +18,23 @@ using std::string;
 using std::vector;
 
 // TODO: Return the system's CPU
-Processor& System::Cpu() { return cpu_; }
+Processor& System::Cpu() { 
+  vector<string> cpuUtilization = LinuxParser::CpuUtilization();
+  // Calculate aggregate CPU utilization here  
+  cpu_ = Processor(0.47);
+  return cpu_;
+}
 
-// IN PROGRESS
+// DONE
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
   processes_.clear();
+
   std::vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
     Process process(pid, LinuxParser::User(pid), LinuxParser::Command(pid),
-                    LinuxParser::CpuUtilization(pid), LinuxParser::UpTime(pid), LinuxParser::Ram(pid));
+                    LinuxParser::CpuUtilization(pid), LinuxParser::UpTime(pid),
+                    LinuxParser::Ram(pid));
     processes_.emplace_back(process);
   }
 
@@ -42,6 +48,7 @@ vector<Process>& System::Processes() {
 // TODO: Return the system's kernel identifier (string)
 std::string System::Kernel() { return LinuxParser::Kernel(); }
 
+// DONE
 // TODO: Return the system's memory utilization
 float System::MemoryUtilization() { return LinuxParser::MemoryUtilization(); }
 
