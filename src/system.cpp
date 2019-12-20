@@ -32,7 +32,7 @@ vector<Process>& System::Processes() {
 
   std::sort(this->processes_.begin(), this->processes_.end(),
        [](const Process& a, const Process& b) {
-         return a < b;
+         return b < a;
        });
 
   return processes_;

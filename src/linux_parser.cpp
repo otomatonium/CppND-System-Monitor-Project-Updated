@@ -250,20 +250,19 @@ float LinuxParser::CpuUtilization(int pid) {
     return NULL;
   }
 
-  long int utime = stol(stats[13]);
-  long int stime = stol(stats[14]);
-  long int cutime = stol(stats[15]);
-  long int cstime = stol(stats[16]);
-  long int starttime = stol(stats[21]);
+  float utime = stol(stats[13]);
+  float stime = stol(stats[14]);
+  float cutime = stol(stats[15]);
+  float cstime = stol(stats[16]);
+  float starttime = stol(stats[21]);
 
-  // getconf_TCK_CLK;
-  int hertz = sysconf(_SC_CLK_TCK);
+  //int hertz = getconf(CLK_TCK);
+  float hertz = sysconf(_SC_CLK_TCK);
 
-  long int total_time = utime + stime;
+  float total_time = utime + stime;
   // total_time += cutime + cstime;
-  long int recentUptime = UpTime() > 3600 ? 3600 : UpTime();
-  long int seconds = recentUptime - (starttime / hertz);
-
-  float cpu_usage = 100.0 * ((total_time / hertz) / (float)seconds);
-  return cpu_usage;
+  
+  float seconds = UpTime() - (starttime / hertz);
+  if (seconds > 3600) seconds = 3600;
+  return ((total_time / hertz) / seconds);
 }
