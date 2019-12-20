@@ -11,7 +11,8 @@ const std::string kProcDirectory{"/proc/"};
 const std::string kCmdlineFilename{"/cmdline"};
 const std::string kCpuinfoFilename{"/cpuinfo"};
 const std::string kStatusFilename{"/status"};
-const std::string kStatFilename{"/stat"};
+const std::string 
+kStatFilename{"/stat"};
 const std::string kUptimeFilename{"/uptime"};
 const std::string kMeminfoFilename{"/meminfo"};
 const std::string kVersionFilename{"/version"};
@@ -23,6 +24,7 @@ const std::string kLabelTotalProcesses{"processes"};
 const std::string kLabelRunningProcesses{"procs_running"};
 const std::string kErr{"ERROR"};
 const std::string kLabelUid("Uid:");
+const std::string kLabelRam("VmSize:");
 
 // System
 float MemoryUtilization();
@@ -50,6 +52,7 @@ std::vector<std::string> CpuUtilization();
 long Jiffies();
 long ActiveJiffies();
 long ActiveJiffies(int pid);
+
 long IdleJiffies();
 
 // Processes

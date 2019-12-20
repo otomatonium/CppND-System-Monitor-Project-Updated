@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iomanip>
 
 using std::stof;
 using std::string;
@@ -170,7 +171,28 @@ string LinuxParser::Command(int pid) {
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid [[maybe_unused]]) { return string(); }
+string LinuxParser::Ram(int pid) { 
+  string lineLabel;
+  string val;
+  string line;
+
+  std::ifstream stream(kProcDirectory + to_string(pid) + kStatusFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      linestream >> lineLabel;
+
+      if (lineLabel == kLabelRam) {
+        linestream >> val;
+        float mb = stof(val) / 1024.0;
+        std::stringstream ramStream;
+        ramStream << std::fixed << std::setprecision(2) << mb;
+        return ramStream.str();
+      }
+    }
+  }
+  return val;
+}
 
 // DONE
 // TODO: Read and return the user ID associated with a process
