@@ -25,6 +25,7 @@ const std::string kLabelRunningProcesses{"procs_running"};
 const std::string kErr{"ERROR"};
 const std::string kLabelUid("Uid:");
 const std::string kLabelRam("VmSize:");
+const std::string kLabelCpu("cpu");
 
 // System
 float MemoryUtilization();
