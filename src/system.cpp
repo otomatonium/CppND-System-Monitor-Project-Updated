@@ -17,11 +17,11 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+// DONE
 // TODO: Return the system's CPU
-Processor& System::Cpu() { 
-  vector<string> cpuUtilization = LinuxParser::CpuUtilization();
-  // Calculate aggregate CPU utilization here  
-  cpu_ = Processor(LinuxParser::ActiveJiffies() / (float)LinuxParser::Jiffies());
+Processor& System::Cpu() {
+  cpu_ =
+      Processor(LinuxParser::ActiveJiffies() / (float)LinuxParser::Jiffies());
   return cpu_;
 }
 
@@ -33,8 +33,8 @@ vector<Process>& System::Processes() {
   std::vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
     Process process(pid, LinuxParser::User(pid), LinuxParser::Command(pid),
-                    LinuxParser::CpuUtilization(pid), LinuxParser::UpTime(pid),
-                    LinuxParser::Ram(pid));
+                    LinuxParser::CpuUtilization(pid), LinuxParser::Ram(pid),
+                    LinuxParser::UpTime(pid));
     processes_.emplace_back(process);
   }
 

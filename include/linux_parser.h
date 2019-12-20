@@ -22,7 +22,7 @@ const std::string kPasswordPath{"/etc/passwd"};
 // Text labels
 const std::string kLabelTotalProcesses{"processes"};
 const std::string kLabelRunningProcesses{"procs_running"};
-const std::string kErr{"ERROR"};
+const std::string kEmpty{""};
 const std::string kLabelUid("Uid:");
 const std::string kLabelRam("VmSize:");
 const std::string kLabelCpu("cpu");
@@ -35,6 +35,9 @@ const std::string kLabelShmem("Shmem:");
 const std::string kLabelSwapTotal("SwapTotal:");
 const std::string kLabelSwapFree("SwapFree:");
 
+// Numerical error return values
+const int kErrInt = -1;
+const int kErrFloat = -1.0;
 
 
 
@@ -64,11 +67,12 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
+
 std::vector<std::string> CpuUtilization();
 long Jiffies();
+long Jiffies(int pid);
 long ActiveJiffies();
 long ActiveJiffies(int pid);
-
 long IdleJiffies();
 
 // Processes
