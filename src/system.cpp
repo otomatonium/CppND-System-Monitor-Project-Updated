@@ -24,16 +24,16 @@ Processor& System::Cpu() { return cpu_; }
 // IN PROGRESS
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
+  processes_.clear();
   std::vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
-    Process process(pid, LinuxParser::User(pid), LinuxParser::Command(pid), LinuxParser::CpuUtilization(pid), LinuxParser::UpTime(pid));
+    Process process(pid, LinuxParser::User(pid), LinuxParser::Command(pid),
+                    LinuxParser::CpuUtilization(pid), LinuxParser::UpTime(pid));
     processes_.emplace_back(process);
   }
 
-  std::sort(this->processes_.begin(), this->processes_.end(),
-       [](const Process& a, const Process& b) {
-         return b < a;
-       });
+  std::sort(processes_.begin(), processes_.end(),
+            [](const Process& a, const Process& b) { return b < a; });
 
   return processes_;
 }

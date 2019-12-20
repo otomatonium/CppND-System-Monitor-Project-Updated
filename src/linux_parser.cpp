@@ -165,7 +165,7 @@ string LinuxParser::Command(int pid) {
       return val;
     }
   }
-  return kErr;
+  return val;
 }
 
 // TODO: Read and return the memory used by a process
@@ -223,7 +223,7 @@ string LinuxParser::User(int pid) {
 // DONE
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid) { 
+long LinuxParser::UpTime(int pid) {
   string item;
   std::vector<string> stats;
   std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
@@ -256,13 +256,14 @@ float LinuxParser::CpuUtilization(int pid) {
   float cstime = stol(stats[16]);
   float starttime = stol(stats[21]);
 
-  //int hertz = getconf(CLK_TCK);
+  // int hertz = getconf(CLK_TCK);
   float hertz = sysconf(_SC_CLK_TCK);
 
   float total_time = utime + stime;
   // total_time += cutime + cstime;
-  
+
   float seconds = UpTime() - (starttime / hertz);
   if (seconds > 3600) seconds = 3600;
+
   return ((total_time / hertz) / seconds);
 }
