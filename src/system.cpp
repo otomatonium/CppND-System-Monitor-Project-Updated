@@ -21,7 +21,7 @@ using std::vector;
 Processor& System::Cpu() { 
   vector<string> cpuUtilization = LinuxParser::CpuUtilization();
   // Calculate aggregate CPU utilization here  
-  cpu_ = Processor(0.47);
+  cpu_ = Processor(LinuxParser::ActiveJiffies() / (float)LinuxParser::Jiffies());
   return cpu_;
 }
 

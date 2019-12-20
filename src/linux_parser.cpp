@@ -76,7 +76,8 @@ vector<int> LinuxParser::Pids() {
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
   string lineLabel;
-  long memTotal, memFree, buffers, cached, sReclaimable, shmem, swapTotal, swapFree;
+  long memTotal, memFree, buffers, cached, sReclaimable, shmem, swapTotal,
+      swapFree;
   string val;
   string line;
 
@@ -119,7 +120,7 @@ float LinuxParser::MemoryUtilization() {
     }
 
     // Calculate memory usage
-     return (memTotal - memFree) / (float)memTotal;
+    return (memTotal - memFree) / (float)memTotal;
   }
 
   return NULL;
@@ -143,17 +144,33 @@ long LinuxParser::UpTime() {
 }
 
 // TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
+long LinuxParser::Jiffies() { return ActiveJiffies() + IdleJiffies(); }
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::ActiveJiffies(int pid [[maybe_unused]]) { return 0; }
 
 // TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
+long LinuxParser::ActiveJiffies() {
+  vector<string> cu = LinuxParser::CpuUtilization();
+  long user = stol(cu[0]);
+  long nice = stol(cu[1]);
+  long system = stol(cu[2]);
+  long irq = stol(cu[5]);
+  long softirq = stol(cu[6]);
+  long steal = stol(cu[7]);
+
+  return user + nice + system + irq + softirq + steal;
+}
 
 // TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
+long LinuxParser::IdleJiffies() {
+  vector<string> cu = LinuxParser::CpuUtilization();
+  long idle = stol(cu[3]);
+  long iowait = stol(cu[4]);
+  
+  return idle + iowait;
+}
 
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() {
@@ -166,13 +183,16 @@ vector<string> LinuxParser::CpuUtilization() {
       std::istringstream linestream(line);
       linestream >> lineLabel;
       if (lineLabel == kLabelCpu) {
-        while (std::getline(linestream, item, ' ')) {
+        // while (std::getline(linestream, item, ' ')) {
+        while (!linestream.eof()) {
+          linestream >> item;
           stats.emplace_back(item);
         }
         return stats;
       }
     }
   }
+
   return stats;
 }
 
